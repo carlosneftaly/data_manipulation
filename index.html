@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Manipulación de datos con `dplyr`</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Manipulación de datos con `dplyr`">
+  <meta name="author" content="Carlos Neftaly Lozano A.">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <aside class="gdbar">
+    <img src="assets/img/db.jpg">
+  </aside>
+  <hgroup class="auto-fadein">
+    <h1>Manipulación de datos con `dplyr`</h1>
+    <h2>Curso Análisis de datos experimentales con R</h2>
+    <p>Carlos Neftaly Lozano A.<br/>www.microbiostats.com</p>
+  </hgroup>
+  <article></article>  
+  <footer class = 'license'>
+    <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>
+    <img width = '80px' src = 'http://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png'>
+    </a>
+  </footer>
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Manipulación de datos con <code>dplyr</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p><code>dplyr</code> es un paquete para manipulación de datos que proporciona un conjunto coherente de verbos para resolver los desafíos más comunes de manipulación de datos:</p>
+
+<ul>
+<li><code>filter()</code>: selección filas<br></li>
+<li><code>mutate()</code>: Crea una nueva columna</li>
+<li><code>select()</code>: selecciona columnas</li>
+<li><code>arrange()</code>: reordena filas</li>
+<li><code>group_by()</code>: Crea grupo dada una condición </li>
+<li><code>join()</code>: Junta diferente <em>dataframes</em></li>
+<li><code>summarise()</code>: Genera resumenes</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2><code>filter()</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Útil cuando se desea filtar <em>filas</em> que satisfacen una condición particular. </p>
+
+<ul>
+<li>El primer argumento es el <code>dataframe</code> que se desar filtar. </li>
+<li>El seugndo es la condicón que se desea satisfacer. </li>
+</ul>
+
+<pre><code class="r">filter(datos, status==&#39;Active&#39;)
+</code></pre>
+
+<p>Si se desea filtar por varias condiciones se usa el operador <code>&amp;</code> o <code>|</code>. </p>
+
+<pre><code class="r">filter(datos, status==&#39;Active&#39; &amp; smoker==&#39;Si&#39;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2><code>filter()</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Las condiciones puede ser evaluadas usando los siguientes operadores: </p>
+
+<ul>
+<li><code>==</code>: Igual a</li>
+<li><code>!=</code>: No igual a</li>
+<li><code>&gt;, &gt;=</code>: Mayor a, Mayor o igual </li>
+<li><code>&lt;, &lt;=</code>: Menor a, Menor o igual a</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2><code>filter()</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Generemos un subconjuto con los <em>hombres sedentarios</em> y peso mayor a <em>80</em>: </li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2><code>filter()</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>Generemos un subconjuto con los <em>hombres sedentarios</em> y peso mayor a <em>80</em>: </li>
+</ul>
+
+<pre><code class="r">datos1&lt;-filter(datos, sex==&#39;Masculino&#39; &amp; status==&#39;Sedentary&#39;, weight&gt;80)
+head(datos1)
+</code></pre>
+
+<pre><code>##   id    status duration oxygen heartbeat age height weight       sex
+## 1 47 Sedentary      679   31.4       190  37    176     82 Masculino
+## 2 49 Sedentary      727   47.6       210  28    185     84 Masculino
+## 3 54 Sedentary      760   47.2       184  33    182     87 Masculino
+## 4 57 Sedentary      590   35.1       174  42    188     93 Masculino
+## 5 61 Sedentary      660   46.7       190  44    176     81 Masculino
+## 6 65 Sedentary      480   30.2       174  44    172     84 Masculino
+##   smoker
+## 1     Si
+## 2     Si
+## 3     Si
+## 4     Si
+## 5     No
+## 6     Si
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2><code>filter()</code>.... tu turno</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><span style="display:block; height: 2cm;"></span></p>
+
+<p><img src="https://media.giphy.com/media/xT0xeCI09WVWUXS3gk/giphy.gif" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="400px" style="display: block; margin: auto;" /></p>
+
+<p><span style="display:block; height: 0.5cm;"></span></p>
+
+<ul>
+<li><p>Cree un subconjuto llamado <code>datos2</code> donde se incluyan <em>Mujeres no fumadoras no mayores a 50 años y con una duración mayor a 50</em>.</p></li>
+<li><p>Cree un subconjuto llamado <code>datos3</code> donde se incluyan individuos fumadores con peso entre 55 y 80.</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2><code>select()</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Permite obtener <code>columnas</code> que cumplen una condición. El primer argumento es el <code>dataframe</code> y los argumentos subsequentes las columnas que se desean obtener. </p>
+
+<h3>Para seleccionar</h3>
+
+<pre><code class="r">select(datos, var1, var2, var3)
+</code></pre>
+
+<h3>Para remover</h3>
+
+<pre><code class="r">select(datos, -var1, -var2)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2><code>select()</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>Crear un <code>dataset</code> llamado <code>datos4</code> removiendo la variable <code>id</code>.</h3>
+
+<pre><code class="r">datos4&lt;-select(datos, -id)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>mutate()</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Esta función agrega una nueva columna al <code>dataset</code>. </p>
+
+<pre><code class="r">mutate(datos, logHb=log(heartbeat))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>mutate() ..... tu turno</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><span style="display:block; height: 2cm;"></span></p>
+
+<p><img src="https://media.giphy.com/media/5AcR8w022Gk4E/giphy.gif" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" width="400px" style="display: block; margin: auto;" />
+<span style="display:block; height: 2cm;"></span></p>
+
+<ul>
+<li>Cree un conjunto de datos llamados <code>datos5</code> donde se crea una variable nueva: <code>VR</code> que contenga el cociente entre <code>oxygen</code> y <code>duration</code>. </li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>summarize()</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Útil para agregar o resumir. A menudo usado en conjunto con otras funciones como: </p>
+
+<ul>
+<li><code>n()</code>: Cuenta el número de registros</li>
+<li><code>mean()</code>: Calcula el promedio</li>
+<li><code>median()</code>: Calcula la mediana</li>
+<li><code>sd()</code>: Calcula desviación estándar</li>
+<li><code>max()</code>: Busca el valor máximo</li>
+<li><code>min()</code>: Busca el valor mínimo</li>
+<li><code>sum()</code>: Suma todo los valores</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>summarize()</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">summarize(datos, mean(oxygen))
+</code></pre>
+
+<pre><code class="r">summarize(datos, r=cor(oxygen, age))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>group_by()</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Permite agrupar los datos por los niveles de una variable categórica y aplicar, posteriomente, otras funciones</p>
+
+<pre><code class="r">group_by(datos, status)
+</code></pre>
+
+<pre><code>## # A tibble: 94 x 10
+## # Groups:   status [2]
+##       id status duration oxygen heartbeat   age height weight sex   smoker
+##    &lt;int&gt; &lt;fct&gt;     &lt;int&gt;  &lt;dbl&gt;     &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;fct&gt; &lt;fct&gt; 
+##  1     1 Active      660   38.1       184    23    177     83 Masc~ Si    
+##  2     2 Active      628   38.4       183    21    163     52 Masc~ Si    
+##  3     3 Active      637   41.7       200    21    174     61 Femi~ No    
+##  4     4 Active      575   33.5       170    42    160     50 Masc~ Si    
+##  5     5 Active      590   28.6       188    34    170     68 Femi~ No    
+##  6     6 Active      600   23.9       190    43    171     68 Masc~ No    
+##  7     7 Active      562   29.6       190    30    172     63 Masc~ No    
+##  8     8 Active      495   27.3       180    49    157     53 Masc~ Si    
+##  9     9 Active      540   33.2       184    30    178     63 Masc~ Si    
+## 10    10 Active      470   26.6       162    57    161     63 Femi~ Si    
+## # ... with 84 more rows
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Combinando <code>group_by()</code> y <code>summarise()</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">summarize(group_by(datos, status), ProHeart=mean(heartbeat), sdHeart=sd(heartbeat))
+</code></pre>
+
+<pre><code>## # A tibble: 2 x 3
+##   status    ProHeart sdHeart
+##   &lt;fct&gt;        &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Active        181.    11.4
+## 2 Sedentary     180.    20.2
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Combinando <code>group_by()</code>, <code>summarise()</code> y <code>%&gt;%</code></h2>
+  </hgroup>
+  <article data-timings="">
+    <p>El operador <code>%&gt;%</code> ,del paquete magrittr,  permiter enlazar funciones del tal forma que se ejecuente de forma continua..</p>
+
+<pre><code class="r">datos6&lt;-datos %&gt;% group_by(status)  %&gt;%
+  summarise(ProHeart=mean(heartbeat), sdHeart=sd(heartbeat))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Combinando <code>group_by()</code>, <code>summarise()</code> y <code>%&gt;%</code> ... tu turno</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="https://media.giphy.com/media/xRFiDPIVR2Dfy/giphy.gif" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" width="300px" style="display: block; margin: auto;" /></p>
+
+<ol class = "build incremental">
+<li>Cree un conjunto de datos llamado <code>datos7</code></li>
+<li>Selecciones sólo las mujeres (sex: Femenino)</li>
+<li>Agrupe por <code>smoker</code> (Si, No)</li>
+<li>Obtenga una variable nueva llamada  <code>r</code> donde calcule el coeficiente de correlación <code>cor()</code> entre <code>duration</code>y <code>heartbeat</code>. </li>
+<li>Agregue la variable <code>r</code> a <code>datos7</code></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Manipulación de datos con <code>dplyr</code>'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='<code>filter()</code>'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='<code>filter()</code>'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='<code>filter()</code>'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='<code>filter()</code>'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='<code>filter()</code>.... tu turno'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='<code>select()</code>'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='<code>select()</code>'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='mutate()'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='mutate() ..... tu turno'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='summarize()'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='summarize()'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='group_by()'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='Combinando <code>group_by()</code> y <code>summarise()</code>'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='Combinando <code>group_by()</code>, <code>summarise()</code> y <code>%&gt;%</code>'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='Combinando <code>group_by()</code>, <code>summarise()</code> y <code>%&gt;%</code> ... tu turno'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='NA'>
+         17
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
