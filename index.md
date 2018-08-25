@@ -276,7 +276,29 @@ datos6<-datos %>% group_by(status)  %>%
 >4. Agregue la variable `r` a `datos7`
 
 
+--- 
 
+## Respuesta.... 
+
+
+```r
+datos7<-datos %>% filter(sex=='Femino') %>% group_by(smoker) %>%
+    summarise(r=cor(duration, heartbeat)) %>%mutate(r)
+```
+
+
+---
+
+
+## Combinando `group_by()`, `summarise()` y `%>%` ... tu turno
+
+
+<img src="https://media.giphy.com/media/xRFiDPIVR2Dfy/giphy.gif" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="300px" style="display: block; margin: auto;" />
+
+¿ Cuál es el promedio de `heartbeat`para hombres fumadores que tuvieron una duration mayor a 600? 
+
+
++ Cree un conjunto de datos llamado `datos8`
 
 
 --- 

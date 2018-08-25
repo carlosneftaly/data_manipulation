@@ -366,6 +366,36 @@ head(datos1)
 </slide>
 
 <slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Respuesta....</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">datos7&lt;-datos %&gt;% filter(sex==&#39;Femino&#39;) %&gt;% group_by(smoker) %&gt;%
+    summarise(r=cor(duration, heartbeat)) %&gt;%mutate(r)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Combinando <code>group_by()</code>, <code>summarise()</code> y <code>%&gt;%</code> ... tu turno</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="https://media.giphy.com/media/xRFiDPIVR2Dfy/giphy.gif" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" width="300px" style="display: block; margin: auto;" /></p>
+
+<p>¿ Cuál es el promedio de <code>heartbeat</code>para hombres fumadores que tuvieron una duration mayor a 600? </p>
+
+<ul>
+<li>Cree un conjunto de datos llamado <code>datos8</code></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
   <article data-timings="">
     
   </article>
@@ -474,8 +504,20 @@ head(datos1)
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=17 title='NA'>
+        data-slide=17 title='Respuesta....'>
          17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='Combinando <code>group_by()</code>, <code>summarise()</code> y <code>%&gt;%</code> ... tu turno'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='NA'>
+         19
       </a>
     </li>
   </ul>
